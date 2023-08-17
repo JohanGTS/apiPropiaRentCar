@@ -60,6 +60,7 @@ async function createReservaPieza(req, res) {
 async function updateReservaEstado(req, res) {
   try {
     const { idReserva_res, estado_res } = req.body;
+    console.log(idReserva_res, estado_res);
     const query = "UPDATE reserva SET estado_res = ? WHERE idReserva_res = ?";
     await db.executeQuery(query, [estado_res, idReserva_res]);
     res.json({ Status: "Reserva estado updated" });

@@ -63,12 +63,150 @@ async function verificarDisponibilidadPersonal(req, res) {
   }
 }
 
-// Implement other controller functions here
+async function getReserva(req, res) {
+  try {
+    const { id } = req.params;
+    const query = "SELECT * FROM reserva WHERE idReserva_res = ?";
+    const data = await db.executeQuery(query, [id]);
+    if (data.length > 0) {
+      res.json(rows[0]);
+    } else {
+      res.status(404).json({ error: "Reserva not found" });
+    }
+  } catch (error) {
+    console.error("Error getting reserva:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function postReserva(req, res) {
+  try {
+    const {
+      idReserva_res,
+      idCliente_res,
+      FechaInicio_Res,
+      FechaFin_Res,
+      idVehiculo_res,
+      costoPorDia_fac,
+      idRecepcionOnline_fac,
+      estado_res,
+      Nota_Res,
+      Hora_res,
+      idPersonal_res,
+    } = req.body;
+    const query = `
+    CALL reservarVehiculo(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+    const data = await db.executeQuery(query, [
+      idReserva_res,
+      idCliente_res,
+      FechaInicio_Res,
+      FechaFin_Res,
+      idVehiculo_res,
+      costoPorDia_fac,
+      idRecepcionOnline_fac,
+      estado_res,
+      Nota_Res,
+      Hora_res,
+      idPersonal_res,
+    ]);
+    res.json({ Status: "Reserva updated" });
+  } catch (error) {
+    console.error("Error updating reserva:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function postReserva(req, res) {
+  try {
+    const {
+      idReserva_res,
+      idCliente_res,
+      FechaInicio_Res,
+      FechaFin_Res,
+      idVehiculo_res,
+      costoPorDia_fac,
+      idRecepcionOnline_fac,
+      estado_res,
+      Nota_Res,
+      Hora_res,
+      idPersonal_res,
+    } = req.body;
+    const query = `
+    CALL reservarVehiculo(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      `;
+    const data = await db.executeQuery(query, [
+      idReserva_res,
+      idCliente_res,
+      FechaInicio_Res,
+      FechaFin_Res,
+      idVehiculo_res,
+      costoPorDia_fac,
+      idRecepcionOnline_fac,
+      estado_res,
+      Nota_Res,
+      Hora_res,
+      idPersonal_res,
+    ]);
+    res.json({ Status: "Reserva updated" });
+  } catch (error) {
+    console.error("Error updating reserva:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function putReserva(req, res) {
+  try {
+    const {
+      idCliente_res,
+      FechaInicio_Res,
+      FechaFin_Res,
+      idVehiculo_res,
+      costoPorDia_fac,
+      idRecepcionOnline_fac,
+      estado_res,
+      Nota_Res,
+      Hora_res,
+    } = req.body;
+    const { idReserva_res } = req.params;
+    const query = `
+    CALL reservarVehiculo(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      `;
+    const data = await db.executeQuery(query, [
+      idReserva_res,
+      idCliente_res,
+      FechaInicio_Res,
+      FechaFin_Res,
+      idVehiculo_res,
+      costoPorDia_fac,
+      idRecepcionOnline_fac,
+      estado_res,
+      Nota_Res,
+      Hora_res,
+    ]);
+    res.json({ Status: "Reserva updated" });
+  } catch (error) {
+    console.error("Error updating reserva:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function deleteReserva(req, res) {
+  try {
+    const { id } = req.params;
+    const query = "DELETE FROM reserva WHERE idReserva_res = ?";
+    res.json({ Status: "Reserva deleted" });
+  } catch (error) {
+    console.error("Error deleting reserva:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
 
 module.exports = {
   pagarConTarjeta,
   getReservasByCliente,
   verificarDisponibilidad,
   verificarDisponibilidadPersonal,
-  // Add other functions here
+  postReserva,
+  putReserva,
+  deleteReserva,
 };

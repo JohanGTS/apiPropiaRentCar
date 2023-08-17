@@ -60,7 +60,7 @@ router.put(
 );
 router.delete("/combustible/:id", combustibleController.deleteCombustible);
 
-/dashboard/;
+//dashboard/;
 router.get(
   "/dashboard/ultimasReservas",
   dashboardController.getUltimasReservas
@@ -119,7 +119,10 @@ router.delete("/documento/:id", documentoController.deleteDocumento);
 router.get("/entrega", entregaController.getReservas);
 router.get("/entrega/:id", entregaController.getReservaById);
 router.post("/entrega", entregaController.createReservaPieza);
-router.put("/entrega/:idReserva_res", entregaController.updateReservaEstado);
+router.put(
+  "/entrega/reserva/:idReserva_res",
+  entregaController.updateReservaEstado
+);
 
 //marca
 router.get("/marca", marcaController.getMarcas);
@@ -212,6 +215,10 @@ router.post(
   "/reserva/disponiblePersonal",
   reservasController.verificarDisponibilidadPersonal
 ); // Usa la función del controlador para verificar disponibilidad de personal
+
+router.post("/reserva/", reservasController.postReserva);
+router.put("/reserva/:idReserva_res", reservasController.putReserva);
+router.delete("/reserva/:idReserva_res", reservasController.deleteReserva);
 
 //seguros
 router.get("/seguro/", segurosController.getSeguros); // Usa la función del controlador para obtener todos los seguros

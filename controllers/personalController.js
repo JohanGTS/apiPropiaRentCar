@@ -87,11 +87,7 @@ async function getUsuarioByNombre(req, res) {
       "SELECT lower(Nombre_usu) as Nombre_usu FROM usuario WHERE Nombre_usu = ?";
     const rows = await db.executeQuery(query, [Nombre_usu]);
 
-    if (rows.length > 0) {
-      res.json(rows[0]);
-    } else {
-      res.status(404).json({ error: "Usuario not found" });
-    }
+    res.json(rows[0]);
   } catch (error) {
     console.error("Error fetching usuario by nombre:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -126,7 +122,7 @@ async function createUsuario(req, res) {
       idTipoUsuario_usu,
       Nombre_usu,
       Clave_usu,
-      Estado_usu,
+      1,
       Especificacion_terdir,
     ]);
 
@@ -202,7 +198,7 @@ async function updateUsuario(req, res) {
       idTipoUsuario_usu,
       Nombre_usu,
       Clave_usu,
-      Estado_usu,
+      1,
       Especificacion_terdir,
     ]);
 

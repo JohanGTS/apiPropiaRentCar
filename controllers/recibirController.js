@@ -65,11 +65,11 @@ async function entregarPieza(req, res) {
 
 async function actualizarEstadoReserva(req, res) {
   try {
-    const { idReserva_res, estado_res } = req.body;
+    const { idReserva_rp, estado_res } = req.body;
     const query = `
       UPDATE reserva SET estado_res = ? WHERE idReserva_res = ?;
       `;
-    await db.executeQuery(query, [estado_res, idReserva_res]);
+    await db.executeQuery(query, [estado_res, idReserva_rp]);
     res.json({ Status: "Reserva updated" });
   } catch (error) {
     console.error("Error updating reserva:", error);
