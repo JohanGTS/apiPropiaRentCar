@@ -3,6 +3,11 @@ const express = require("express");
 const router = express.Router();
 const dataController = require("../controllers/dataController");
 const coloresController = require("../controllers/coloresController");
+const actividadController = require("../controllers/actividadController");
+const componentesController = require("../controllers/componentesController");
+const regionController = require("../controllers/regionController");
+const unidadController = require("../controllers/unidadesController");
+const categoriaController = require("../controllers/categoriaController");
 const cancelacionController = require("../controllers/cancelacionController");
 const asignarController = require("../controllers/asignarController");
 const combustibleController = require("../controllers/combustibleController");
@@ -268,6 +273,8 @@ router.get("/vehiculo/", vehiculoController.getVehicles); // Obtener vehículos
 
 router.get("/vehiculo/vehiculo", vehiculoController.getVehiculo); // Obtener vehículos
 
+router.get("/vehiculo/segregado/", vehiculoController.getVehiculoSegregado); // Obtener vehículos segregados
+
 router.get("/vehiculo/:id", vehiculoController.getVehicleById); // Obtener un vehículo por su ID
 
 router.post("/vehiculo/", vehiculoController.createVehicle); // Crear un nuevo vehículo
@@ -275,5 +282,32 @@ router.post("/vehiculo/", vehiculoController.createVehicle); // Crear un nuevo v
 router.put("/vehiculo/:idVehiculo_veh", vehiculoController.updateVehicle); // Actualizar un vehículo por su ID
 
 router.delete("/vehiculo/:id", vehiculoController.deleteVehicle); // Eliminar un vehículo por su ID
+router.post("/vehiculo/segregacion", vehiculoController.segregacion); // Usa la función del controlador para verificar disponibilidad de vehículos
+router.get("/vehiculo/componente/:id",vehiculoController.getComponentsVehicleById)
+
+//actividad
+router.get("/actividad", actividadController.getActividades); // Obtener vehículos
+
+router.get("/actividad/:id", actividadController.getActividadesById); // Obtener un vehículo por su ID
+
+// componentes
+router.get("/componente", componentesController.getComponentes); // Obtener vehículos
+
+router.get("/componente/:id", componentesController.getComponentesById); // Obtener un vehículo por su ID
+
+//region
+router.get("/region", regionController.getRegiones); // Obtener vehículos
+
+router.get("/region/:id", regionController.getRegionesById); // Obtener un vehículo por su ID
+
+//unidad
+router.get("/unidad", unidadController.getUnidades); // Obtener vehículos
+
+router.get("/unidad/:id", unidadController.getUnidadesById); // Obtener un vehículo por su ID
+
+//categoria
+router.get("/categoria", categoriaController.getCategorias); // Obtener vehículos
+
+router.get("/categoria/:id", categoriaController.getCategoriasById); // Obtener un vehículo por su ID
 
 module.exports = router;

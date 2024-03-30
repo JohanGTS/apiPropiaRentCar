@@ -1,7 +1,7 @@
 const db = require("../models/db");
 const multer = require("multer");
 
-const rutaImagen = `C:/Users/Johan/Desktop/Proyecto/rent-car-proyecto/src/assets`;
+const rutaImagen = `C:/Users/Johan/Desktop/PruebLocalProyecti/rentCarProyectoFinal/src/assets/images`;
 const fileUpload = multer({
   storage: multer.diskStorage({
     destination: rutaImagen,
@@ -36,6 +36,60 @@ async function uploadImage(req, res) {
   }
 }
 
+async function getVehiculoSegregado(req, res) {
+  try {
+    console.log(res);
+    const { categoria, actividad, region, componente } = req.body;
+    //const { categoria, actividad, region, componente } = req.params;
+    console.log(req);
+
+    const query =
+      "SELECT * FROM vista_vehiculo WHERE FIND_IN_SET(idVehiculo_veh, funcion_segregarVehiculos(" +
+      categoria +
+      ", " +
+      actividad +
+      ", " +
+      region +
+      ", " +
+      componente +
+      "));";
+
+    //"SELECT * FROM vista_vehiculo WHERE FIND_IN_SET(idVehiculo_veh, funcion_segregarVehiculos( '1', '', '', ''));";
+    //"SELECT * FROM vista_vehiculo WHERE FIND_IN_SET(idVehiculo_veh, funcion_segregarVehiculos( ?, ?, ?, ?));";
+    const rows = await db.executeQuery(query, [
+      categoria,
+      actividad,
+      region,
+      componente,
+    ]);
+    if (rows.length > 0) {
+      res.json(rows);
+    } else {
+      res.status(404).json({ error: "Vehículo no encontrado" });
+    }
+  } catch (error) {
+    //console.error("Error fetching vehicle:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function segregacion(req, res) {
+  const { categoria, actividad, region, componente } = req.body;
+  console.log(req.body);
+  try {
+    const query = "call sp_segregacion(?, ?, ?,?) ";
+    const data = await db.executeQuery(query, [
+      categoria,
+      actividad,
+      region,
+      componente,
+    ]);
+    res.json(data);
+  } catch (error) {
+    console.error("Error verifying vehicle availability:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
 async function getVehiculo(req, res) {
   try {
     const sql = "SELECT * FROM vista_vehiculo";
@@ -83,6 +137,24 @@ async function getVehicleById(req, res) {
       res.json(rows[0]);
     } else {
       res.status(404).json({ error: "Vehículo no encontrado" });
+    }
+  } catch (error) {
+    console.error("Error fetching vehicle:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function getComponentsVehicleById(req, res) {
+  try {
+    const { id } = req.params;
+    const query =
+      "SELECT * FROM componente_vehiculo WHERE idvehiculo_vcmp = ?";
+    const rows = await db.executeQuery(query, [id]);
+
+    if (rows.length > 0) {
+      res.json(rows);
+    } else {
+      res.status(404).json({ error: "Componentes no encontrados" });
     }
   } catch (error) {
     console.error("Error fetching vehicle:", error);
@@ -192,4 +264,7 @@ module.exports = {
   updateVehicle,
   deleteVehicle,
   getVehiculo,
+  segregacion,
+  getVehiculoSegregado,
+  getComponentsVehicleById,
 };
